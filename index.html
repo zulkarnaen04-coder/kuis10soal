@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>KUIS MUSIK KELAS 7</title>
+  <title>ZULKARNAEN - KUIS MUSIK KELAS 7</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; -webkit-user-select: none; }
-    body { background: linear-gradient(135deg, #0d1b2a, #1b263b); color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; padding: 10px; overflow-x: hidden; }
+    body { background: #0d0c1d; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; padding: 10px; overflow-x: hidden; }
     
     /* Anti-Cheat Overlay */
     .cheat-warning { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(230, 57, 70, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
@@ -14,63 +14,70 @@
     .cheat-warning p { font-size: 16px; color: #f8f9fa; margin-bottom: 20px; line-height: 1.5; }
     .cheat-warning button { background: #fff; color: #e63946; font-size: 18px; font-weight: bold; padding: 12px 30px; border: none; border-radius: 25px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
 
-    /* Header */
-    .header { background: #1b263b; border-radius: 12px; padding: 12px 15px; border: 2px solid #f4a261; box-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-bottom: 15px; }
-    .top-info { display: flex; justify-content: space-between; align-items: center; }
-    .student-info { font-size: 16px; color: #a8dadc; margin-bottom: 6px; font-weight: 600; }
-    .q-counter { font-size: 16px; font-weight: bold; color: #f4a261; }
-    .score-badge { background: #2a9d8f; padding: 6px 16px; border-radius: 15px; font-size: 16px; font-weight: bold; color: #fff; }
+    /* START SCREEN TEMA GAME NEON */
+    .start-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0d0c1d; z-index: 9998; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; overflow-y: auto; }
+    
+    .start-title { color: #00f2fe; font-size: 32px; font-weight: 900; letter-spacing: 2px; text-shadow: 0 0 10px #00f2fe, 0 0 20px #00f2fe; margin-bottom: 5px; }
+    .start-subtitle { color: #ff007f; font-size: 14px; font-weight: bold; letter-spacing: 1px; text-shadow: 0 0 8px #ff007f; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-    /* Layout Ubin (Grid Tile Layout) */
-    .tiles-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)); gap: 10px; padding: 10px; background: #1b263b; border: 2px solid #415a77; border-radius: 15px; flex-grow: 1; max-height: calc(100vh - 180px); overflow-y: auto; }
-    .tile-btn { background: #2a3d54; border: 2px solid #415a77; border-radius: 10px; color: #fff; font-size: 16px; font-weight: bold; height: 60px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+    /* Input Form Siswa Neon */
+    .student-form { background: #131129; border: 2px solid #ff007f; box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); padding: 20px; border-radius: 20px; width: 100%; max-width: 380px; margin-bottom: 20px; text-align: left; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; font-size: 13px; color: #ffea00; font-weight: 800; margin-bottom: 6px; letter-spacing: 0.5px; }
+    .form-group input { width: 100%; padding: 12px 15px; font-size: 14px; border-radius: 12px; border: 1.5px solid #00f2fe; background: #080711; color: #fff; outline: none; box-shadow: inset 0 0 5px rgba(0, 242, 254, 0.2); user-select: text; -webkit-user-select: text; }
+    .form-group input:focus { border-color: #ff007f; box-shadow: 0 0 8px rgba(255, 0, 127, 0.6); }
+
+    /* Rule Box Neon */
+    .rule-box { background: #131129; border: 2px solid #7b2cbf; box-shadow: 0 0 15px rgba(123, 44, 191, 0.4); padding: 18px; border-radius: 20px; text-align: left; font-size: 13px; margin-bottom: 25px; width: 100%; max-width: 380px; }
+    .rule-box strong { color: #ffea00; font-size: 14px; display: block; margin-bottom: 10px; letter-spacing: 0.5px; }
+    .rule-box ul { list-style: none; }
+    .rule-box li { margin-bottom: 8px; color: #e0e0e0; line-height: 1.4; }
+
+    /* Start Button Gaming */
+    .start-btn { background: linear-gradient(90deg, #00c6ff, #92fe9d); color: #000; font-size: 20px; font-weight: 900; padding: 16px 40px; border: none; border-radius: 35px; cursor: pointer; box-shadow: 0 0 20px rgba(0, 242, 254, 0.6); width: 100%; max-width: 380px; letter-spacing: 1px; transition: transform 0.2s, box-shadow 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .start-btn:active { transform: scale(0.96); box-shadow: 0 0 10px rgba(0, 242, 254, 0.4); }
+
+    /* Header Main Quiz */
+    .header { background: #131129; border-radius: 15px; padding: 12px 15px; border: 2px solid #00f2fe; box-shadow: 0 0 10px rgba(0,242,254,0.3); margin-bottom: 15px; }
+    .top-info { display: flex; justify-content: space-between; align-items: center; }
+    .student-info { font-size: 15px; color: #ffea00; margin-bottom: 6px; font-weight: 700; }
+    .q-counter { font-size: 15px; font-weight: bold; color: #00f2fe; }
+    .score-badge { background: #ff007f; padding: 6px 16px; border-radius: 15px; font-size: 15px; font-weight: bold; color: #fff; box-shadow: 0 0 8px rgba(255,0,127,0.5); }
+
+    /* Layout Ubin */
+    .tiles-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)); gap: 10px; padding: 12px; background: #131129; border: 2px solid #7b2cbf; border-radius: 18px; flex-grow: 1; max-height: calc(100vh - 180px); overflow-y: auto; }
+    .tile-btn { background: #1c1836; border: 2px solid #3c346a; border-radius: 12px; color: #fff; font-size: 18px; font-weight: bold; height: 60px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
     .tile-btn:active { transform: scale(0.95); }
-    .tile-btn:hover { background: #3a506b; border-color: #f4a261; }
+    .tile-btn:hover { background: #2a2452; border-color: #00f2fe; }
     .tile-btn.correct { background: #2a9d8f !important; border-color: #2a9d8f !important; color: #fff !important; cursor: not-allowed; }
     .tile-btn.wrong { background: #e63946 !important; border-color: #e63946 !important; color: #fff !important; cursor: not-allowed; }
 
     /* Finish Action Button */
     .finish-bar { margin-top: 15px; text-align: center; }
-    .finish-btn { background: #2a9d8f; color: #fff; font-size: 18px; font-weight: bold; padding: 14px 30px; border: none; border-radius: 25px; cursor: pointer; width: 100%; max-width: 400px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: none; }
+    .finish-btn { background: linear-gradient(90deg, #ff007f, #7b2cbf); color: #fff; font-size: 18px; font-weight: bold; padding: 14px 30px; border: none; border-radius: 25px; cursor: pointer; width: 100%; max-width: 400px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 15px rgba(255,0,127,0.5); display: none; }
 
     /* Modal Dialog Soal */
-    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 9000; justify-content: center; align-items: center; padding: 15px; }
-    .modal-card { background: #1b263b; border: 2px solid #f4a261; border-radius: 15px; padding: 20px; width: 100%; max-width: 500px; box-shadow: 0 8px 20px rgba(0,0,0,0.6); display: flex; flex-direction: column; position: relative; max-height: 90vh; overflow-y: auto; }
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.88); z-index: 9000; justify-content: center; align-items: center; padding: 15px; }
+    .modal-card { background: #131129; border: 2px solid #00f2fe; box-shadow: 0 0 20px rgba(0, 242, 254, 0.4); border-radius: 20px; padding: 20px; width: 100%; max-width: 500px; display: flex; flex-direction: column; position: relative; max-height: 90vh; overflow-y: auto; }
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .modal-title { font-size: 16px; font-weight: bold; color: #f4a261; }
-    .close-modal-btn { background: #e63946; color: #fff; border: none; font-weight: bold; padding: 4px 10px; border-radius: 5px; cursor: pointer; }
+    .modal-title { font-size: 16px; font-weight: bold; color: #ffea00; }
+    .close-modal-btn { background: #e63946; color: #fff; border: none; font-weight: bold; padding: 4px 10px; border-radius: 6px; cursor: pointer; }
 
     /* Timer UI Dalam Modal */
-    .timer-container { width: 100%; background: #0d1b2a; border-radius: 10px; height: 16px; border: 1px solid #415a77; overflow: hidden; position: relative; margin-bottom: 15px; }
-    .timer-bar { height: 100%; width: 100%; background: linear-gradient(90deg, #2a9d8f, #e76f51); transition: width 1s linear, background-color 0.5s; }
+    .timer-container { width: 100%; background: #080711; border-radius: 10px; height: 16px; border: 1px solid #3c346a; overflow: hidden; position: relative; margin-bottom: 15px; }
+    .timer-bar { height: 100%; width: 100%; background: linear-gradient(90deg, #00f2fe, #ff007f); transition: width 1s linear, background-color 0.5s; }
     .timer-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 11px; font-weight: bold; color: #fff; text-shadow: 1px 1px 2px #000; }
 
     /* Pertanyaan & Opsi Jawaban */
-    .question-box { background: #0d1b2a; border: 1px solid #f4a261; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; line-height: 1.4; text-align: center; min-height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #f4a261; margin-bottom: 15px; }
-    .audio-btn { background: #e76f51; color: #fff; border: none; padding: 8px 16px; font-size: 14px; font-weight: bold; border-radius: 20px; cursor: pointer; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+    .question-box { background: #080711; border: 1px solid #ff007f; padding: 15px; border-radius: 12px; font-size: 16px; font-weight: bold; line-height: 1.4; text-align: center; min-height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #00f2fe; margin-bottom: 15px; }
+    .audio-btn { background: #ff007f; color: #fff; border: none; padding: 8px 18px; font-size: 14px; font-weight: bold; border-radius: 20px; cursor: pointer; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 0 10px rgba(255,0,127,0.5); }
 
     .options-grid { display: flex; flex-direction: column; gap: 10px; }
-    .opt-btn { background: #2a3d54; border: 2px solid #415a77; color: #fff; padding: 12px 15px; border-radius: 10px; font-size: 15px; font-weight: 600; text-align: center; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; }
+    .opt-btn { background: #1c1836; border: 2px solid #3c346a; color: #fff; padding: 12px 15px; border-radius: 12px; font-size: 15px; font-weight: 600; text-align: center; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; }
     .opt-btn:active { transform: scale(0.98); }
-    .opt-btn:hover { background: #3a506b; border-color: #f4a261; }
+    .opt-btn:hover { background: #2a2452; border-color: #00f2fe; }
     .opt-btn.correct { background: #2a9d8f !important; border-color: #2a9d8f !important; color: #fff !important; }
     .opt-btn.wrong { background: #e63946 !important; border-color: #e63946 !important; color: #fff !important; }
-
-    /* Start Screen Overlay */
-    .start-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0d1b2a; z-index: 9998; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; overflow-y: auto; }
-    .start-title { color: #f4a261; font-size: 28px; font-weight: bold; margin-bottom: 8px; }
-    .start-desc { color: #a8dadc; font-size: 13px; margin-bottom: 20px; line-height: 1.4; }
-    
-    /* Input Form Siswa */
-    .student-form { background: #1b263b; border: 2px solid #f4a261; padding: 15px; border-radius: 12px; width: 100%; max-width: 350px; margin-bottom: 15px; text-align: left; }
-    .form-group { margin-bottom: 12px; }
-    .form-group label { display: block; font-size: 13px; color: #f4a261; font-weight: bold; margin-bottom: 5px; }
-    .form-group input { width: 100%; padding: 10px 12px; font-size: 14px; border-radius: 8px; border: 1px solid #415a77; background: #0d1b2a; color: #fff; outline: none; user-select: text; -webkit-user-select: text; }
-    .form-group input:focus { border-color: #f4a261; }
-
-    .rule-box { background: #1b263b; border: 1px solid #415a77; padding: 12px; border-radius: 10px; text-align: left; font-size: 12px; margin-bottom: 20px; width: 100%; max-width: 350px; }
-    .rule-box li { margin-bottom: 6px; color: #fff; }
-    .start-btn { background: #2a9d8f; color: #fff; font-size: 18px; font-weight: bold; padding: 14px 40px; border: none; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 12px rgba(42,157,143,0.4); width: 100%; max-width: 350px; }
   </style>
 </head>
 <body>
@@ -82,33 +89,33 @@
     <button onclick="resumeQuiz()">LANJUTKAN KUIS</button>
   </div>
 
-  <!-- Screen Awal / Start -->
+  <!-- Screen Awal / Start Game Neon Style -->
   <div class="start-screen" id="start-screen">
-    <div class="start-title">ZULKARNAEN KUIS MUSIK KELAS 7</div>
-    <div class="start-desc">Sistem Kuis Mode Ubin (Grid) Anti-Curang & Terdata di Google Sheets</div>
+    <div class="start-title">ZULKARNAEN</div>
+    <div class="start-subtitle">🎧 KUIS EAR TRAINING & WAWASAN REGIONAL 🎧</div>
     
     <div class="student-form">
       <div class="form-group">
-        <label for="student-name">Nama Lengkap Siswa:</label>
+        <label for="student-name">NAMA LENGKAP MURID:</label>
         <input type="text" id="student-name" placeholder="Masukkan nama lengkap..." autocomplete="off">
       </div>
       <div class="form-group" style="margin-bottom:0;">
-        <label for="student-class">Kelas:</label>
-        <input type="text" id="student-class" placeholder="Contoh: 7A / 7.1" autocomplete="off">
+        <label for="student-class">KELAS:</label>
+        <input type="text" id="student-class" placeholder="Contoh: 7 Unggul / 7.1" autocomplete="off">
       </div>
     </div>
 
     <div class="rule-box">
-      <strong style="color:#f4a261; display:block; margin-bottom:6px;">PERATURAN KUIS:</strong>
+      <strong>ATURAN EAR TRAINING:</strong>
       <ul>
-        <li>🟦 <strong>Total Soal:</strong> 10 Soal PILIHAN.</li>
-        <li>⏱️ <strong>Waktu Soal:</strong> 1 Menit (60 Detik) per soal yang dibuka.</li>
-        <li>🔊 <strong>Soal Bersuara:</strong> Dengarkan audio dengan baik untuk soal kepekaan ritme.</li>
-        <li>🚫 <strong>Dilarang Pindah Aplikasi:</strong> Keluar browser / tab lain terdeteksi curang.</li>
-        <li>⚠️ <strong>Batas Pelanggaran:</strong> Maksimal 3 kali sebelum didiskualifikasi!</li>
+        <li>🎧 <strong>10 Soal Pendengaran:</strong> Melatih pendengaran nada solfeggio, pola ritme & teori.</li>
+        <li>⏱️ <strong>Waktu Soal:</strong> 1 Menit (60 Detik) per soal.</li>
+        <li>⚠️ <strong>Pengurangan Poin:</strong> Pelanggaran 1x (-5 poin), 2x (-10 poin), 3x (Diskualifikasi).</li>
+        <li>🚫 <strong>Anti-Curang:</strong> Dilarang pindah tab/aplikasi saat kuis berlangsung.</li>
       </ul>
     </div>
-    <button class="start-btn" onclick="validateAndStart()">MULAI KUIS</button>
+    
+    <button class="start-btn" onclick="validateAndStart()">START GAME 🚀</button>
   </div>
 
   <!-- Header Section -->
@@ -153,7 +160,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz8t2WdvXIXRiHwGcxwncHuf7TGLvdS_UQVTUd5TcbYUDd-TxxeP-101_kWohbGpxH9Nw/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLlFjDUN03qJ4oRzW4RXMetplgcasO4AW-6HZv6OduRg8IRqiDYihlj37hYBK-HZJm/exec";
 
     // WEB AUDIO SYNTHESIZER
     let audioCtx = null;
@@ -239,7 +246,7 @@
       }
     }
 
-    // 10 SOAL PILIHAN (AUDIO & TEORI)
+    // 10 SOAL PILIHAN
     var selectedQuestions = [
       { q: "Dengarkan suara bunyi berikut! Berapa jumlah ketukan nilai durasi bunyi tunggal tersebut?", options: ["1 Ketukan", "2 Ketukan", "3 Ketukan", "4 Ketukan"], correctText: "2 Ketukan", audio: { type: "single", duration: 2.0 } },
       { q: "Dengarkan warna suara (timbre) audio berikut! Suara instrumen musik yang dimainkan adalah...", options: ["Gitar", "Biola", "Drum / Perkusi", "Angklung"], correctText: "Biola", audio: { type: "inst", instrument: "violin" } },
@@ -314,6 +321,20 @@
       }
     });
 
+    function calculateFinalScore() {
+      var baseScore = Math.round((correctAnswersCount / selectedQuestions.length) * 100);
+      var penalty = 0;
+      
+      if (cheatCount === 1) {
+        penalty = 5;
+      } else if (cheatCount === 2) {
+        penalty = 10;
+      }
+      
+      var finalScore = baseScore - penalty;
+      return Math.max(0, finalScore);
+    }
+
     function handleCheatViolation(reason) {
       cheatCount++;
       clearInterval(timerInterval);
@@ -341,7 +362,7 @@
     }
 
     function startQuiz() {
-      quizStartTime = new Date(); // Mencatat waktu mulai kuis
+      quizStartTime = new Date();
       getAudioContext();
       document.getElementById("start-screen").style.display = "none";
       renderGridTiles();
@@ -435,9 +456,9 @@
       if (timeLeft <= 10) {
         bar.style.background = "#e63946";
       } else if (timeLeft <= 30) {
-        bar.style.background = "#e76f51";
+        bar.style.background = "#ff007f";
       } else {
-        bar.style.background = "linear-gradient(90deg, #2a9d8f, #e76f51)";
+        bar.style.background = "linear-gradient(90deg, #00f2fe, #ff007f)";
       }
     }
 
@@ -518,7 +539,7 @@
     }
 
     function sendDataToGoogleSheets() {
-      var finalScore = Math.round((correctAnswersCount / selectedQuestions.length) * 100);
+      var finalScore = calculateFinalScore();
       
       var durationInSeconds = 0;
       if (quizStartTime) {
@@ -547,24 +568,28 @@
 
     function finishQuiz() {
       clearInterval(timerInterval);
-      var finalScore = Math.round((correctAnswersCount / selectedQuestions.length) * 100);
+      var finalScore = calculateFinalScore();
+      var baseScore = Math.round((correctAnswersCount / selectedQuestions.length) * 100);
+      var penalty = cheatCount === 1 ? 5 : (cheatCount === 2 ? 10 : 0);
       
       sendDataToGoogleSheets();
 
       document.body.innerHTML = `
-        <div style="min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; background:#0d1b2a; color:#fff; text-align:center; padding:20px;">
-          <h1 style="color:#f4a261; font-size:26px; margin-bottom:15px;">KUIS SELESAI! 🏆</h1>
-          <p style="color:#2a9d8f; font-size:14px; margin-bottom:20px;">Data nilai Anda telah berhasil terdata di sistem Google Sheets.</p>
-          <div style="background:#1b263b; border:2px solid #2a9d8f; padding:20px; border-radius:15px; width:100%; max-width:350px; margin-bottom:20px; text-align:left;">
-            <p style="font-size:15px; margin-bottom:8px; color:#f4a261;">Nama: <strong>${studentName}</strong></p>
-            <p style="font-size:15px; margin-bottom:15px; color:#f4a261;">Kelas: <strong>${studentClass}</strong></p>
-            <hr style="border:0; border-top:1px solid #415a77; margin-bottom:15px;">
-            <p style="font-size:16px; margin-bottom:10px;">Soal Terjawab: <strong>${answeredCount} / ${selectedQuestions.length} Soal</strong></p>
-            <p style="font-size:16px; margin-bottom:10px;">Jawaban Benar: <strong style="color:#2a9d8f;">${correctAnswersCount} Soal</strong></p>
-            <p style="font-size:16px; margin-bottom:10px;">Pelanggaran Curang: <strong style="color:${cheatCount > 0 ? '#e63946' : '#2a9d8f'};">${cheatCount} Kali</strong></p>
-            <p style="font-size:22px; font-weight:bold; color:#2a9d8f; margin-top:10px;">Nilai Akhir: ${finalScore}</p>
+        <div style="min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; background:#0d0c1d; color:#fff; text-align:center; padding:20px;">
+          <h1 style="color:#00f2fe; text-shadow:0 0 10px #00f2fe; font-size:26px; margin-bottom:15px;">KUIS SELESAI! 🏆</h1>
+          <p style="color:#ffea00; font-size:14px; margin-bottom:20px;">Data nilai Anda telah berhasil terdata di sistem Google Sheets.</p>
+          <div style="background:#131129; border:2px solid #ff007f; box-shadow:0 0 15px rgba(255,0,127,0.4); padding:20px; border-radius:20px; width:100%; max-width:350px; margin-bottom:20px; text-align:left;">
+            <p style="font-size:15px; margin-bottom:8px; color:#ffea00;">Nama: <strong>${studentName}</strong></p>
+            <p style="font-size:15px; margin-bottom:15px; color:#ffea00;">Kelas: <strong>${studentClass}</strong></p>
+            <hr style="border:0; border-top:1px solid #3c346a; margin-bottom:15px;">
+            <p style="font-size:15px; margin-bottom:8px;">Soal Terjawab: <strong>${answeredCount} / ${selectedQuestions.length} Soal</strong></p>
+            <p style="font-size:15px; margin-bottom:8px;">Jawaban Benar: <strong style="color:#00f2fe;">${correctAnswersCount} Soal</strong></p>
+            <p style="font-size:15px; margin-bottom:8px;">Skor Awal: <strong>${baseScore}</strong></p>
+            <p style="font-size:15px; margin-bottom:8px;">Pelanggaran Curang: <strong style="color:${cheatCount > 0 ? '#ff007f' : '#00f2fe'};">${cheatCount} Kali (-${penalty} poin)</strong></p>
+            <hr style="border:0; border-top:1px solid #3c346a; margin-top:10px; margin-bottom:10px;">
+            <p style="font-size:22px; font-weight:bold; color:#00f2fe; text-shadow:0 0 8px #00f2fe;">Nilai Akhir: ${finalScore}</p>
           </div>
-          <button onclick="location.reload()" style="background:#2a9d8f; color:#fff; font-size:16px; font-weight:bold; padding:12px 30px; border:none; border-radius:25px; cursor:pointer;">KEMBALI KE HALAMAN UTAMA</button>
+          <button onclick="location.reload()" style="background:linear-gradient(90deg, #00c6ff, #92fe9d); color:#000; font-size:16px; font-weight:900; padding:12px 30px; border:none; border-radius:25px; cursor:pointer; box-shadow:0 0 15px rgba(0,242,254,0.5);">KEMBALI KE HALAMAN UTAMA</button>
         </div>
       `;
     }
