@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>KUIS MUSIK KELAS 7</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; -webkit-user-select: none; }
+    body { background: linear-gradient(135deg, #0d1b2a, #1b263b); color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; padding: 10px; overflow-x: hidden; }
+    
+    /* Anti-Cheat Overlay */
+    .cheat-warning { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(230, 57, 70, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+    .cheat-warning h1 { font-size: 28px; color: #fff; margin-bottom: 15px; text-transform: uppercase; }
+    .cheat-warning p { font-size: 16px; color: #f8f9fa; margin-bottom: 20px; line-height: 1.5; }
+    .cheat-warning button { background: #fff; color: #e63946; font-size: 18px; font-weight: bold; padding: 12px 30px; border: none; border-radius: 25px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
+    /* Header */
+    .header { background: #1b263b; border-radius: 12px; padding: 12px 15px; border: 2px solid #f4a261; box-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-bottom: 15px; }
+    .top-info { display: flex; justify-content: space-between; align-items: center; }
+    .student-info { font-size: 16px; color: #a8dadc; margin-bottom: 6px; font-weight: 600; }
+    .q-counter { font-size: 16px; font-weight: bold; color: #f4a261; }
+    .score-badge { background: #2a9d8f; padding: 6px 16px; border-radius: 15px; font-size: 16px; font-weight: bold; color: #fff; }
+
+    /* Layout Ubin (Grid Tile Layout) */
+    .tiles-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)); gap: 10px; padding: 10px; background: #1b263b; border: 2px solid #415a77; border-radius: 15px; flex-grow: 1; max-height: calc(100vh - 180px); overflow-y: auto; }
+    .tile-btn { background: #2a3d54; border: 2px solid #415a77; border-radius: 10px; color: #fff; font-size: 16px; font-weight: bold; height: 60px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+    .tile-btn:active { transform: scale(0.95); }
+    .tile-btn:hover { background: #3a506b; border-color: #f4a261; }
+    .tile-btn.correct { background: #2a9d8f !important; border-color: #2a9d8f !important; color: #fff !important; cursor: not-allowed; }
+    .tile-btn.wrong { background: #e63946 !important; border-color: #e63946 !important; color: #fff !important; cursor: not-allowed; }
+
+    /* Finish Action Button */
+    .finish-bar { margin-top: 15px; text-align: center; }
+    .finish-btn { background: #2a9d8f; color: #fff; font-size: 18px; font-weight: bold; padding: 14px 30px; border: none; border-radius: 25px; cursor: pointer; width: 100%; max-width: 400px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: none; }
+
+    /* Modal Dialog Soal */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 9000; justify-content: center; align-items: center; padding: 15px; }
+    .modal-card { background: #1b263b; border: 2px solid #f4a261; border-radius: 15px; padding: 20px; width: 100%; max-width: 500px; box-shadow: 0 8px 20px rgba(0,0,0,0.6); display: flex; flex-direction: column; position: relative; max-height: 90vh; overflow-y: auto; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .modal-title { font-size: 16px; font-weight: bold; color: #f4a261; }
+    .close-modal-btn { background: #e63946; color: #fff; border: none; font-weight: bold; padding: 4px 10px; border-radius: 5px; cursor: pointer; }
+
+    /* Timer UI Dalam Modal */
+    .timer-container { width: 100%; background: #0d1b2a; border-radius: 10px; height: 16px; border: 1px solid #415a77; overflow: hidden; position: relative; margin-bottom: 15px; }
+    .timer-bar { height: 100%; width: 100%; background: linear-gradient(90deg, #2a9d8f, #e76f51); transition: width 1s linear, background-color 0.5s; }
+    .timer-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 11px; font-weight: bold; color: #fff; text-shadow: 1px 1px 2px #000; }
+
+    /* Pertanyaan & Opsi Jawaban */
+    .question-box { background: #0d1b2a; border: 1px solid #f4a261; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; line-height: 1.4; text-align: center; min-height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #f4a261; margin-bottom: 15px; }
+    .audio-btn { background: #e76f51; color: #fff; border: none; padding: 8px 16px; font-size: 14px; font-weight: bold; border-radius: 20px; cursor: pointer; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+
+    .options-grid { display: flex; flex-direction: column; gap: 10px; }
+    .opt-btn { background: #2a3d54; border: 2px solid #415a77; color: #fff; padding: 12px 15px; border-radius: 10px; font-size: 15px; font-weight: 600; text-align: center; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; }
+    .opt-btn:active { transform: scale(0.98); }
+    .opt-btn:hover { background: #3a506b; border-color: #f4a261; }
+    .opt-btn.correct { background: #2a9d8f !important; border-color: #2a9d8f !important; color: #fff !important; }
+    .opt-btn.wrong { background: #e63946 !important; border-color: #e63946 !important; color: #fff !important; }
+
+    /* Start Screen Overlay */
+    .start-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0d1b2a; z-index: 9998; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; overflow-y: auto; }
+    .start-title { color: #f4a261; font-size: 28px; font-weight: bold; margin-bottom: 8px; }
+    .start-desc { color: #a8dadc; font-size: 13px; margin-bottom: 20px; line-height: 1.4; }
+    
+    /* Input Form Siswa */
+    .student-form { background: #1b263b; border: 2px solid #f4a261; padding: 15px; border-radius: 12px; width: 100%; max-width: 350px; margin-bottom: 15px; text-align: left; }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 13px; color: #f4a261; font-weight: bold; margin-bottom: 5px; }
+    .form-group input { width: 100%; padding: 10px 12px; font-size: 14px; border-radius: 8px; border: 1px solid #415a77; background: #0d1b2a; color: #fff; outline: none; user-select: text; -webkit-user-select: text; }
+    .form-group input:focus { border-color: #f4a261; }
+
+    .rule-box { background: #1b263b; border: 1px solid #415a77; padding: 12px; border-radius: 10px; text-align: left; font-size: 12px; margin-bottom: 20px; width: 100%; max-width: 350px; }
+    .rule-box li { margin-bottom: 6px; color: #fff; }
+    .start-btn { background: #2a9d8f; color: #fff; font-size: 18px; font-weight: bold; padding: 14px 40px; border: none; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 12px rgba(42,157,143,0.4); width: 100%; max-width: 350px; }
+  </style>
+</head>
+<body>
+
+  <!-- Screen Peringatan Anti Curang -->
+  <div class="cheat-warning" id="cheat-screen">
+    <h1 id="cheat-title">PERINGATAN CURANG!</h1>
+    <p id="cheat-msg">Terdeteksi meninggalkan aplikasi / membuka tab lain!</p>
+    <button onclick="resumeQuiz()">LANJUTKAN KUIS</button>
+  </div>
+
+  <!-- Screen Awal / Start -->
+  <div class="start-screen" id="start-screen">
+    <div class="start-title">ZULKARNAEN KUIS MUSIK KELAS 7</div>
+    <div class="start-desc">Sistem Kuis Mode Ubin (Grid) Anti-Curang & Terdata di Google Sheets</div>
+    
+    <div class="student-form">
+      <div class="form-group">
+        <label for="student-name">Nama Lengkap Siswa:</label>
+        <input type="text" id="student-name" placeholder="Masukkan nama lengkap..." autocomplete="off">
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label for="student-class">Kelas:</label>
+        <input type="text" id="student-class" placeholder="Contoh: 7A / 7.1" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="rule-box">
+      <strong style="color:#f4a261; display:block; margin-bottom:6px;">PERATURAN KUIS:</strong>
+      <ul>
+        <li>🟦 <strong>Total Soal:</strong> 10 Soal PILIHAN.</li>
+        <li>⏱️ <strong>Waktu Soal:</strong> 1 Menit (60 Detik) per soal yang dibuka.</li>
+        <li>🔊 <strong>Soal Bersuara:</strong> Dengarkan audio dengan baik untuk soal kepekaan ritme.</li>
+        <li>🚫 <strong>Dilarang Pindah Aplikasi:</strong> Keluar browser / tab lain terdeteksi curang.</li>
+        <li>⚠️ <strong>Batas Pelanggaran:</strong> Maksimal 3 kali sebelum didiskualifikasi!</li>
+      </ul>
+    </div>
+    <button class="start-btn" onclick="validateAndStart()">MULAI KUIS</button>
+  </div>
+
+  <!-- Header Section -->
+  <div class="header">
+    <div class="student-info" id="display-student-info">Siswa: - | Kelas: -</div>
+    <div class="top-info">
+      <div class="q-counter" id="q-counter">Terjawab: 0 / 10 Soal</div>
+      <div class="score-badge" id="score-badge">Skor: 0</div>
+    </div>
+  </div>
+
+  <!-- Grid Ubin Soal -->
+  <div class="tiles-container" id="tiles-container"></div>
+
+  <!-- Tombol Selesai Kuis -->
+  <div class="finish-bar">
+    <button class="finish-btn" id="finish-btn" onclick="finishQuiz()">KIRIM & LIHAT HASIL 🏆</button>
+  </div>
+
+  <!-- Modal Dialog Pertanyaan -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">Pertanyaan Soal</div>
+        <button class="close-modal-btn" onclick="closeModalDirectly()">✕ Batal</button>
+      </div>
+
+      <div class="timer-container">
+        <div class="timer-bar" id="timer-bar"></div>
+        <div class="timer-text" id="timer-text">01:00</div>
+      </div>
+
+      <div class="question-box" id="question-box">
+        <span id="question-text">Memuat soal...</span>
+        <button id="audio-play-btn" class="audio-btn" style="display:none;" onclick="playQuestionSound()">
+          🔊 Putar Suara Soal
+        </button>
+      </div>
+
+      <div class="options-grid" id="options-grid"></div>
+    </div>
+  </div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLlFjDUN03qJ4oRzW4RXMetplgcasO4AW-6HZv6OduRg8IRqiDYihlj37hYBK-HZJm/exec";
+
+    // WEB AUDIO SYNTHESIZER
+    let audioCtx = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playAudioPattern(audioData) {
+      const ctx = getAudioContext();
+      const bpm = 60; 
+      const beatSec = 60 / bpm;
+      const now = ctx.currentTime + 0.1;
+
+      if (audioData.type === 'single') {
+        playTone(audioData.duration * beatSec, now, audioData.instrument || 'sine');
+      } else if (audioData.type === 'pattern') {
+        let currentOffset = 0;
+        audioData.notes.forEach(note => {
+          if (note.dur > 0) {
+            playTone(note.dur * beatSec, now + currentOffset, note.inst || 'sine');
+          }
+          currentOffset += note.step * beatSec;
+        });
+      } else if (audioData.type === 'inst') {
+        playInstrumentSound(audioData.instrument, now);
+      }
+    }
+
+    function playTone(dur, startTime, inst = 'sine') {
+      const ctx = getAudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      if (inst === 'violin') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(440, startTime);
+        gain.gain.setValueAtTime(0, startTime);
+        gain.gain.linearRampToValueAtTime(0.3, startTime + 0.1);
+        gain.gain.setValueAtTime(0.3, startTime + Math.max(0.1, dur - 0.1));
+        gain.gain.linearRampToValueAtTime(0.001, startTime + dur);
+      } else if (inst === 'guitar') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(329.63, startTime);
+        gain.gain.setValueAtTime(0.4, startTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, startTime + dur);
+      } else {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523.25, startTime);
+        gain.gain.setValueAtTime(0.3, startTime);
+        gain.gain.linearRampToValueAtTime(0.001, startTime + dur);
+      }
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(startTime);
+      osc.stop(startTime + dur);
+    }
+
+    function playInstrumentSound(inst, startTime) {
+      const ctx = getAudioContext();
+      if (inst === 'drum') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.frequency.setValueAtTime(120, startTime);
+        osc.frequency.exponentialRampToValueAtTime(0.01, startTime + 0.3);
+        gain.gain.setValueAtTime(0.8, startTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.3);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(startTime);
+        osc.stop(startTime + 0.3);
+      } else if (inst === 'guitar') {
+        playTone(1.5, startTime, 'guitar');
+      } else if (inst === 'violin') {
+        playTone(2.0, startTime, 'violin');
+      }
+    }
+
+    // 10 SOAL PILIHAN (AUDIO & TEORI)
+    var selectedQuestions = [
+      { q: "Dengarkan suara bunyi berikut! Berapa jumlah ketukan nilai durasi bunyi tunggal tersebut?", options: ["1 Ketukan", "2 Ketukan", "3 Ketukan", "4 Ketukan"], correctText: "2 Ketukan", audio: { type: "single", duration: 2.0 } },
+      { q: "Dengarkan warna suara (timbre) audio berikut! Suara instrumen musik yang dimainkan adalah...", options: ["Gitar", "Biola", "Drum / Perkusi", "Angklung"], correctText: "Biola", audio: { type: "inst", instrument: "violin" } },
+      { q: "Penggunaan metronome saat latihan bertujuan utama untuk...", options: ["Menentukan kencangnya suara", "Menjaga ketepatan dan konsistensi tempo", "Mengatur nada angklung", "Menggantikan guru"], correctText: "Menjaga ketepatan dan konsistensi tempo" },
+      { q: "Istilah BPM dalam pengaturan tempo musik merupakan singkatan dari...", options: ["Beat Per Minute", "Bass Per Minute", "Bar Per Minute", "Band Per Minute"], correctText: "Beat Per Minute" },
+      { q: "Penggunaan gerak anggota tubuh untuk menghasilkan ritme musik disebut...", options: ["Vokal grup", "Body percussion (Perkusi tubuh)", "Solfeggio", "Akustik"], correctText: "Body percussion (Perkusi tubuh)" },
+      { q: "Lagu \"Ibu Kita Kartini\" diciptakan oleh...", options: ["C. Simanjuntak", "W.R. Soepratman", "Ismail Marzuki", "L. Manik"], correctText: "W.R. Soepratman" },
+      { q: "Nada pembentuk Akor C Mayor terdiri dari nada...", options: ["C - E - G", "C - E - A", "F - A - C", "G - B - D"], correctText: "C - E - G" },
+      { q: "Berdasarkan jenisnya, instrumen musik Angklung dimainkan dengan cara...", options: ["Dipukul", "Digoyang / Digetarkan", "Ditiup", "Dipetik"], correctText: "Digoyang / Digetarkan" },
+      { q: "Kejelasan dalam mengucapkan kata demi kata pada lirik lagu disebut...", options: ["Artikulasi", "Phrasering", "Intonasi", "Resonansi"], correctText: "Artikulasi" },
+      { q: "Bernyanyi secara bersama-sama dengan satu suara melodi yang sama dinamakan...", options: ["Bernyanyi Unisono", "Bernyanyi Acappella", "Bernyanyi Canon", "Bernyanyi Solo"], correctText: "Bernyanyi Unisono" }
+    ];
+
+    function shuffleArray(array) {
+      var arr = array.slice();
+      for (var i = arr.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+      }
+      return arr;
+    }
+
+    var studentName = "";
+    var studentClass = "";
+    var currentQIndex = -1;
+    var correctAnswersCount = 0;
+    var answeredCount = 0;
+    var timerInterval = null;
+    var QUESTION_TIME = 60;
+    var timeLeft = QUESTION_TIME;
+    var cheatCount = 0;
+    var MAX_CHEATS = 3;
+    var isAnswered = false;
+    var userAnswers = new Array(10).fill(null);
+    var quizStartTime = null;
+
+    function validateAndStart() {
+      var nameInput = document.getElementById("student-name").value.trim();
+      var classInput = document.getElementById("student-class").value.trim();
+
+      if (nameInput === "" || classInput === "") {
+        alert("Harap isi Nama Lengkap dan Kelas terlebih dahulu!");
+        return;
+      }
+
+      studentName = nameInput;
+      studentClass = classInput;
+
+      document.getElementById("display-student-info").innerText = "Siswa: " + studentName + " | Kelas: " + studentClass;
+      startQuiz();
+    }
+
+    document.addEventListener("visibilitychange", function() {
+      if (document.hidden && document.getElementById("start-screen").style.display === "none") {
+        handleCheatViolation("Terdeteksi meninggalkan aplikasi kuis!");
+      }
+    });
+
+    window.addEventListener("blur", function() {
+      if (document.getElementById("start-screen").style.display === "none") {
+        handleCheatViolation("Terdeteksi keluar dari jendela kuis!");
+      }
+    });
+
+    document.addEventListener("contextmenu", function(e) { e.preventDefault(); });
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "F12" || (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) || (e.ctrlKey && e.key === "u")) {
+        e.preventDefault();
+        handleCheatViolation("Terdeteksi mencoba membuka DevTools!");
+      }
+    });
+
+    function handleCheatViolation(reason) {
+      cheatCount++;
+      clearInterval(timerInterval);
+      
+      var cheatScreen = document.getElementById("cheat-screen");
+      var cheatTitle = document.getElementById("cheat-title");
+      var cheatMsg = document.getElementById("cheat-msg");
+
+      if (cheatCount >= MAX_CHEATS) {
+        cheatTitle.innerText = "DISKUALIFIKASI!";
+        cheatMsg.innerText = "Anda telah melanggar aturan anti-curang sebanyak 3 kali.\nKuis dihentikan dan data pelanggaran tercatat.";
+        cheatScreen.querySelector("button").style.display = "none";
+        cheatScreen.style.display = "flex";
+        sendDataToGoogleSheets();
+      } else {
+        cheatTitle.innerText = `PERINGATAN CURANG (${cheatCount}/${MAX_CHEATS})`;
+        cheatMsg.innerText = reason + "\n\nJangan tinggalkan kuis atau membuka tab lain!";
+        cheatScreen.style.display = "flex";
+      }
+    }
+
+    function resumeQuiz() {
+      document.getElementById("cheat-screen").style.display = "none";
+      if (currentQIndex !== -1 && !isAnswered) startTimer();
+    }
+
+    function startQuiz() {
+      quizStartTime = new Date(); // Mencatat waktu mulai kuis
+      getAudioContext();
+      document.getElementById("start-screen").style.display = "none";
+      renderGridTiles();
+    }
+
+    function renderGridTiles() {
+      var gridContainer = document.getElementById("tiles-container");
+      gridContainer.innerHTML = "";
+      for (var i = 0; i < selectedQuestions.length; i++) {
+        var btn = document.createElement("button");
+        btn.className = "tile-btn";
+        btn.id = "tile-" + i;
+        btn.innerText = (i + 1);
+        btn.onclick = (function(idx) {
+          return function() { openQuestionModal(idx); };
+        })(i);
+        gridContainer.appendChild(btn);
+      }
+    }
+
+    function openQuestionModal(index) {
+      if (userAnswers[index] !== null) return;
+
+      currentQIndex = index;
+      isAnswered = false;
+      timeLeft = QUESTION_TIME;
+
+      var qData = selectedQuestions[currentQIndex];
+      document.getElementById("question-text").innerText = qData.q;
+      
+      var audioBtn = document.getElementById("audio-play-btn");
+      if (qData.audio) {
+        audioBtn.style.display = "inline-flex";
+        playQuestionSound();
+      } else {
+        audioBtn.style.display = "none";
+      }
+
+      var shuffledOptions = shuffleArray(qData.options);
+      var grid = document.getElementById("options-grid");
+      grid.innerHTML = "";
+
+      shuffledOptions.forEach(function(optText) {
+        var btn = document.createElement("button");
+        btn.className = "opt-btn";
+        btn.innerText = optText;
+        btn.onclick = function() { selectAnswer(btn, optText, qData.correctText); };
+        grid.appendChild(btn);
+      });
+
+      document.getElementById("modal-overlay").style.display = "flex";
+      startTimer();
+    }
+
+    function closeModalDirectly() {
+      clearInterval(timerInterval);
+      document.getElementById("modal-overlay").style.display = "none";
+      currentQIndex = -1;
+    }
+
+    function playQuestionSound() {
+      if (currentQIndex !== -1 && selectedQuestions[currentQIndex].audio) {
+        playAudioPattern(selectedQuestions[currentQIndex].audio);
+      }
+    }
+
+    function startTimer() {
+      updateTimerUI();
+      timerInterval = setInterval(function() {
+        timeLeft--;
+        updateTimerUI();
+
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          timeOutAnswer();
+        }
+      }, 1000);
+    }
+
+    function updateTimerUI() {
+      var minutes = Math.floor(timeLeft / 60);
+      var seconds = timeLeft % 60;
+      var timeStr = (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+      
+      document.getElementById("timer-text").innerText = timeStr;
+      
+      var percentage = (timeLeft / QUESTION_TIME) * 100;
+      var bar = document.getElementById("timer-bar");
+      bar.style.width = percentage + "%";
+
+      if (timeLeft <= 10) {
+        bar.style.background = "#e63946";
+      } else if (timeLeft <= 30) {
+        bar.style.background = "#e76f51";
+      } else {
+        bar.style.background = "linear-gradient(90deg, #2a9d8f, #e76f51)";
+      }
+    }
+
+    function selectAnswer(selectedBtn, selectedText, correctText) {
+      if (isAnswered) return;
+      isAnswered = true;
+      clearInterval(timerInterval);
+
+      var isCorrect = (selectedText === correctText);
+      userAnswers[currentQIndex] = isCorrect;
+      answeredCount++;
+
+      var allBtns = document.querySelectorAll(".opt-btn");
+      allBtns.forEach(function(btn) {
+        btn.disabled = true;
+        if (btn.innerText === correctText) {
+          btn.classList.add("correct");
+        } else if (btn === selectedBtn && !isCorrect) {
+          btn.classList.add("wrong");
+        }
+      });
+
+      var tile = document.getElementById("tile-" + currentQIndex);
+      if (isCorrect) {
+        correctAnswersCount++;
+        tile.classList.add("correct");
+      } else {
+        tile.classList.add("wrong");
+      }
+      tile.disabled = true;
+
+      updateOverallProgress();
+
+      setTimeout(function() {
+        document.getElementById("modal-overlay").style.display = "none";
+        currentQIndex = -1;
+      }, 1000);
+    }
+
+    function timeOutAnswer() {
+      if (isAnswered) return;
+      isAnswered = true;
+      userAnswers[currentQIndex] = false;
+      answeredCount++;
+
+      var qData = selectedQuestions[currentQIndex];
+      var allBtns = document.querySelectorAll(".opt-btn");
+      
+      allBtns.forEach(function(btn) {
+        btn.disabled = true;
+        if (btn.innerText === qData.correctText) {
+          btn.classList.add("correct");
+        }
+      });
+
+      var tile = document.getElementById("tile-" + currentQIndex);
+      tile.classList.add("wrong");
+      tile.disabled = true;
+
+      updateOverallProgress();
+
+      setTimeout(function() {
+        document.getElementById("modal-overlay").style.display = "none";
+        currentQIndex = -1;
+      }, 1000);
+    }
+
+    function updateOverallProgress() {
+      var calculatedScore = (correctAnswersCount / selectedQuestions.length) * 100;
+      document.getElementById("q-counter").innerText = `Terjawab: ${answeredCount} / ${selectedQuestions.length} Soal`;
+      document.getElementById("score-badge").innerText = "Skor: " + Math.round(calculatedScore);
+
+      if (answeredCount >= selectedQuestions.length) {
+        document.getElementById("finish-btn").style.display = "inline-block";
+      } else {
+        document.getElementById("finish-btn").style.display = "inline-block";
+      }
+    }
+
+    function sendDataToGoogleSheets() {
+      var finalScore = Math.round((correctAnswersCount / selectedQuestions.length) * 100);
+      
+      var durationInSeconds = 0;
+      if (quizStartTime) {
+        durationInSeconds = Math.round((new Date() - quizStartTime) / 1000);
+      }
+
+      var payload = {
+        nama: studentName,
+        kelas: studentClass,
+        skor: finalScore,
+        durasi: durationInSeconds,
+        pelanggaran: cheatCount
+      };
+
+      if (SCRIPT_URL && SCRIPT_URL.indexOf("AKfycb") !== -1) {
+        fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        }).catch(function(err) {
+          console.error("Gagal mengirim data:", err);
+        });
+      }
+    }
+
+    function finishQuiz() {
+      clearInterval(timerInterval);
+      var finalScore = Math.round((correctAnswersCount / selectedQuestions.length) * 100);
+      
+      sendDataToGoogleSheets();
+
+      document.body.innerHTML = `
+        <div style="min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; background:#0d1b2a; color:#fff; text-align:center; padding:20px;">
+          <h1 style="color:#f4a261; font-size:26px; margin-bottom:15px;">KUIS SELESAI! 🏆</h1>
+          <p style="color:#2a9d8f; font-size:14px; margin-bottom:20px;">Data nilai Anda telah berhasil terdata di sistem Google Sheets.</p>
+          <div style="background:#1b263b; border:2px solid #2a9d8f; padding:20px; border-radius:15px; width:100%; max-width:350px; margin-bottom:20px; text-align:left;">
+            <p style="font-size:15px; margin-bottom:8px; color:#f4a261;">Nama: <strong>${studentName}</strong></p>
+            <p style="font-size:15px; margin-bottom:15px; color:#f4a261;">Kelas: <strong>${studentClass}</strong></p>
+            <hr style="border:0; border-top:1px solid #415a77; margin-bottom:15px;">
+            <p style="font-size:16px; margin-bottom:10px;">Soal Terjawab: <strong>${answeredCount} / ${selectedQuestions.length} Soal</strong></p>
+            <p style="font-size:16px; margin-bottom:10px;">Jawaban Benar: <strong style="color:#2a9d8f;">${correctAnswersCount} Soal</strong></p>
+            <p style="font-size:16px; margin-bottom:10px;">Pelanggaran Curang: <strong style="color:${cheatCount > 0 ? '#e63946' : '#2a9d8f'};">${cheatCount} Kali</strong></p>
+            <p style="font-size:22px; font-weight:bold; color:#2a9d8f; margin-top:10px;">Nilai Akhir: ${finalScore}</p>
+          </div>
+          <button onclick="location.reload()" style="background:#2a9d8f; color:#fff; font-size:16px; font-weight:bold; padding:12px 30px; border:none; border-radius:25px; cursor:pointer;">KEMBALI KE HALAMAN UTAMA</button>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
